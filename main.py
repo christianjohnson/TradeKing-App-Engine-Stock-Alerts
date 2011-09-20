@@ -16,13 +16,8 @@ class Alert(db.Model):
 
 class MainPage(webapp.RequestHandler):
   def get(self):
-    user = users.get_current_user()
     path = os.path.join(os.path.dirname(__file__), 'set_alerts.html')
-    query = Alert.all().filter('user = ', user)
-    template_values = {
-      'alerts': query.fetch(1000),
-      'user' : user,
-    }
+    template_values = {}
     self.response.out.write(template.render(path, template_values))
 
 class CheckAlerts(webapp.RequestHandler):
@@ -61,7 +56,7 @@ class CheckAlerts(webapp.RequestHandler):
         if prices[ticker] < low_price:
           self.response.out.write("Broke below " + user.nickname() + "'s limit of " + low_price)
   
-  def getData(self.stocks):
+  def getData(self,stocks):
     d = {}
     for stock in stocks:
       d[stock['instrument'][sym].upper()] = float(stock['quote']['lastprice'])
