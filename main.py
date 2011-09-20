@@ -68,6 +68,17 @@ class CheckAlerts(webapp.RequestHandler):
           status_code = xmpp.send_message(user_address, msg)
           chat_message_sent = (status_code == xmpp.NO_ERROR)
           
+          user_address = user.email()
+          
+          if not mail.is_email_valid(user_address):
+            # prompt user to enter a valid address
+          else:
+            sender_address = "rpibic@gmail.com"
+            subject = "Alert for %s" % (ticker)
+            body = "Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker)
+            
+            mail.send_mail(sender_address, user_address, subject, body)
+          
         if prices[ticker] < low_price:
           self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
           
@@ -81,7 +92,6 @@ class CheckAlerts(webapp.RequestHandler):
           if not mail.is_email_valid(user_address):
             # prompt user to enter a valid address
           else:
-            confirmation_url = createNewUserConfirmation(self.request)
             sender_address = "rpibic@gmail.com"
             subject = "Alert for %s" % (ticker)
             body = "Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker)
