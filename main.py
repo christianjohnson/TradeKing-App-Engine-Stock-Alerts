@@ -59,7 +59,7 @@ class CheckAlerts(webapp.RequestHandler):
   def getData(self,stocks):
     d = {}
     for stock in stocks:
-      d[stock['instrument'][sym].upper()] = float(stock['quote']['lastprice'])
+      d[stock['instrument']['sym'].upper()] = float(stock['quote']['lastprice'])
     return d
     
 class AddAlert(webapp.RequestHandler):
