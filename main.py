@@ -70,9 +70,7 @@ class CheckAlerts(webapp.RequestHandler):
           
           user_address = user.email()
           
-          if not mail.is_email_valid(user_address):
-            # prompt user to enter a valid address
-          else:
+          if mail.is_email_valid(user_address):
             sender_address = "rpibic@gmail.com"
             subject = "Alert for %s" % (ticker)
             body = "Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker)
@@ -89,9 +87,7 @@ class CheckAlerts(webapp.RequestHandler):
           
           user_address = user.email()
           
-          if not mail.is_email_valid(user_address):
-            # prompt user to enter a valid address
-          else:
+          if mail.is_email_valid(user_address):
             sender_address = "rpibic@gmail.com"
             subject = "Alert for %s" % (ticker)
             body = "Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker)
