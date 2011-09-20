@@ -52,9 +52,9 @@ class CheckAlerts(webapp.RequestHandler):
         ticker    = alert.ticker.upper()
         
         if prices[ticker] > hi_price:
-          self.response.out.write("Broke above %s's limit of %.2f for %s" ) % (user.nickname(),hi_price,ticker)
+          self.response.out.write("Broke above %s's limit of %.2f for %s" % (user.nickname(),hi_price,ticker) )
         if prices[ticker] < low_price:
-          self.response.out.write("Broke below %s's limit of %.2f for %s" ) % (user.nickname(),low_price,ticker)
+          self.response.out.write("Broke below %s's limit of %.2f for %s" % (user.nickname(),low_price,ticker) )
   
   def getData(self,stocks):
     d = {}
