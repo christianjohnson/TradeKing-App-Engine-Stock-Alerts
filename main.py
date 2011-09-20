@@ -43,7 +43,7 @@ class CheckAlerts(webapp.RequestHandler):
     
     d = q.get_quote(list(tickers))
     
-    prices = getData(d)
+    prices = self.getData(d)
     
     for user, alerts in users.items():
       for alert in alert:
@@ -56,7 +56,7 @@ class CheckAlerts(webapp.RequestHandler):
         if prices[ticker] < low_price:
           self.response.out.write("Broke below " + user.nickname() + "'s limit of " + low_price)
   
-  def getData(stocks):
+  def getData(self.stocks):
     d = {}
     for stock in stocks:
       d[stock['instrument'][sym].upper()] = float(stock['quote']['lastprice'])
