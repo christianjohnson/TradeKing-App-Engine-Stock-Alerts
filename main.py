@@ -3,16 +3,19 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
+from google.appengine.api import xmpp
+from google.appengine.api import mail
 import logging
 import cgi, os, urllib
 
 import quote
 
 class Alert(db.Model):
-  ticker    = db.StringProperty()
-  hi_price  = db.FloatProperty()
-  low_price = db.FloatProperty()
-  user      = db.UserProperty()
+  ticker     = db.StringProperty()
+  hi_price   = db.FloatProperty()
+  low_price  = db.FloatProperty()
+  user       = db.UserProperty()
+  curr_price = db.FloatProperty()
 
 class MainPage(webapp.RequestHandler):
   def get(self):
@@ -55,11 +58,37 @@ class CheckAlerts(webapp.RequestHandler):
         hi_price  = float(alert.hi_price)
         low_price = float(alert.low_price)
         ticker    = alert.ticker.upper()
+        user_address = '%s@gmail.com' % (user)
         
         if prices[ticker] > hi_price:
           self.response.out.write("Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker) )
+          
+          chat_message_sent = False
+          msg = "%s went up to %.2f!" % (ticker,prices[ticker])
+          status_code = xmpp.send_message(user_address, msg)
+          chat_message_sent = (status_code == xmpp.NO_ERROR)
+          
         if prices[ticker] < low_price:
           self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
+          
+          chat_message_sent = False
+          msg = "%s went down to %.2f!" % (ticker,prices[ticker])
+          status_code = xmpp.send_message(user_address, msg)
+          chat_message_sent = (status_code == xmpp.NO_ERROR)
+          
+          user_address = user.email()
+          
+          if not mail.is_email_valid(user_address):
+            # prompt user to enter a valid address
+          else:
+            confirmation_url = createNewUserConfirmation(self.request)
+            sender_address = "rpibic@gmail.com"
+            subject = "Alert for %s" % (ticker)
+            body = "Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker)
+            
+            mail.send_mail(sender_address, user_address, subject, body)
+    for alert in alerts:
+      alert.curr_price = prices[alert.ticker]
   
   def getData(self,stocks):
     d = {}
