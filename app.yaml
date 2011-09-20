@@ -1,0 +1,13 @@
+application: ibdstockfinder
+version: 1
+runtime: python
+api_version: 1
+
+inbound_services:
+- mail
+- xmpp_message
+
+handlers:
+
+- url: /.*
+  script: main.py
