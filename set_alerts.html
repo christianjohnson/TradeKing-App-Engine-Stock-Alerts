@@ -6,30 +6,6 @@
 		<title>Set Stock Alerts</title>
 		<link href='http://fonts.googleapis.com/css?family=Puritan:700' rel='stylesheet' type='text/css'>
 		<link href='css/main.css' rel='stylesheet' type='text/css'>
-		<style type="text/css">
-			#chart {
-				text-align: center;
-				margin-left: auto;
-				margin-right: auto;
-			}
-			
-			#stats {
-				text-align: center;
-			}
-			
-		    .clearButton { 
-				width: 30%;
-				text-align: center;
-				margin-left:auto;
-				margin-right:auto;
-				margin-bottom: 3em;
-				margin-top: 3em;
-			}
-			
-			button{
-				width: 40px;
-			}
-		 </style>
 		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript">
 		  $(document).ready(function() {
@@ -48,16 +24,18 @@
 		</head>
 		<body id="body">
 		  <div class="full_width big">Stock Price Alert Settings - {{ user.nickname }}</div>
-		  <div style="text-align: center">Current Alerts:<br>
-			<ul>
+		  <div style="text-align: center; font-family: 'Puritan', 'Trebuchet MS', Helvetica, sans-serif; font-size: 150%;">Current Alerts:<br>
+		  </div>
 			{% for alert in alerts %}
-			  <li>{{ alert.ticker }}</li>
-			  <li>{{ alert.hi_price }}</li>
-			  <li>{{ alert.low_price }}</li>
+			  <div class="ticker">
+			    {{ alert.ticker }}
+			    {{ alert.low_price }}
+			    {{ alert.hi_price }}
+			  </div>
 			{% endfor %}
-			</ul><br>Add alert:
 		  </div>
 		  <div class="clearButton">
+			Add alert:<br>
 			Ticker:<input type="text" id="ticker" /><br>
 			High Price:<input type="text" id="high_price" /><br>
 			Low Price:<input type="text" id="low_price" /><br>
