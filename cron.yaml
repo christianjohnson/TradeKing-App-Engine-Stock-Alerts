@@ -1,5 +1,5 @@
 cron:
 - description: Crawl for stock quotes and check against alerts
   url: /check_alerts
-  schedule: every 1 minutes
+  schedule: every 1 days
   timezone: US/Eastern
