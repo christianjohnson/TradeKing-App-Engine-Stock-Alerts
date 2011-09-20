@@ -95,6 +95,7 @@ class CheckAlerts(webapp.RequestHandler):
             mail.send_mail(sender_address, user_address, subject, body)
     for alert in alerts:
       alert.curr_price = prices[alert.ticker]
+      alert.put()
   
   def getData(self,stocks):
     d = {}
