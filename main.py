@@ -46,7 +46,7 @@ class CheckAlerts(webapp.RequestHandler):
     prices = self.getData(d)
     
     for user, alerts in users.items():
-      for alert in alert:
+      for alert in alerts:
         hi_price  = float(alert.hi_price)
         low_price = float(alert.low_price)
         ticker    = alert.ticker.upper()
