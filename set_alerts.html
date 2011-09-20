@@ -29,7 +29,8 @@
 			{% for alert in alerts %}
 			  <div class="ticker">
 			    {{ alert.ticker }}
-			    {{ alert.low_price }}
+			    {{ alert.low_price }} <
+			    {{ alert.curr_price }} <
 			    {{ alert.hi_price }}
 			  </div>
 			{% endfor %}
