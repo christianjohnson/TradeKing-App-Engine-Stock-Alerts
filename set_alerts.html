@@ -1,0 +1,89 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Set Stock Alerts</title>
+		<link href='http://fonts.googleapis.com/css?family=Puritan:700' rel='stylesheet' type='text/css'>
+		<link href='css/main.css' rel='stylesheet' type='text/css'>
+		<style type="text/css">
+			#chart {
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			#stats {
+				text-align: center;
+			}
+			
+		    .clearButton { 
+				width: 30%;
+				text-align: center;
+				margin-left:auto;
+				margin-right:auto;
+				margin-bottom: 3em;
+				margin-top: 3em;
+			}
+			
+			button{
+				width: 40px;
+			}
+		 </style>
+		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript">
+		  function reDrawMemCache(){
+			// MemCache stats
+			$.ajax({
+		     type: "GET",
+		     url: "/admin_page?getstats=hi",
+		     async: true,
+		     dataType: "json",
+			 success: function(data){
+			     $("#stats").html("Items in MemCache: " + data.items + "<br> Cache Size: " + (data.bytes/1000000) + " MB<br>Index DS: " + data.indexds);
+			     drawChart(data.hits, data.misses);
+		       },
+		    });
+		  }
+		
+		  $(document).ready(function() {
+			
+			$("#memcache").click(function(){
+				$.ajax({
+			     type: "GET",
+			     url: "/admin_page?flushcache=hi",
+			     async: false,
+				 success: function(data){ 
+					reDrawMemCache(); 
+					alert("Cache flushed!");
+				 },
+			   });
+			});
+			
+			$("#counter").click(function(){
+				$.ajax({
+			     type: "GET",
+			     url: "/admin_page?resetpos=hi",
+			     async: false,
+				 success: function(data){ 
+					reDrawMemCache();
+					alert("Position reset!"); 	 
+				 },
+			    });
+			});
+			
+			reDrawMemCache();
+			
+			// Redraw charts and refresh data every so often
+			setInterval("reDrawMemCache()", 15000);
+		  });
+		</script>
+		</head>
+		<body id="body">
+		  <div class="full_width big">Stock Price Alert Settings</div>
+		  <div class="clearButton"><input type="text" /><input type="button" name="keyword" value="Clear MemCache"/></div>
+		  <div class="clearButton" id="counter"><input type="button" name="keyword" id="keyword" value="Reset Counter"/></div>
+		  <div id="chart"></div>
+		  <div id="stats"></div>
+		</body>
+</html>

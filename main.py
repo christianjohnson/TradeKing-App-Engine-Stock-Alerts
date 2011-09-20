@@ -14,7 +14,9 @@ class Alert(db.Model):
 
 class MainPage(webapp.RequestHandler):
   def get(self):
-    self.response.out.write("Hello!")
+    path = os.path.join(os.path.dirname(__file__), 'set_alerts.html')
+    template_values = {}
+    self.response.out.write(template.render(path, template_values))
 
 class CheckAlerts(webapp.RequestHandler):
   def get(self):
