@@ -18,7 +18,7 @@ class MainPage(webapp.RequestHandler):
   def get(self):
     user = users.get_current_user()
     path = os.path.join(os.path.dirname(__file__), 'set_alerts.html')
-    query = Alert.all().filter('user = ', )
+    query = Alert.all().filter('user = ', user)
     template_values = {
       'alerts': query.fetch(1000),
       'user' : user,
