@@ -28,6 +28,5 @@ class quote(object):
 
     # The OAuth Client request works just like httplib2 for the most part.
     _, content = client.request(request_token_url, "GET")
-    content = json.loads(content)
-    
-    pprint.pprint(content['response']['quotes']['instrumentquote'])
+    content = json.loads(content)   
+    return content['response']['quotes']['instrumentquote']
