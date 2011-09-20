@@ -1,6 +1,8 @@
 import oauth2 as oauth
 import time
-from django.utils import simplejson as json
+#from django.utils import simplejson as json
+import simplejson as json
+import pprint
 from keys import TradeKingKeys
 
 class quote(object):
@@ -25,5 +27,7 @@ class quote(object):
     client = oauth.Client(consumer, token)
 
     # The OAuth Client request works just like httplib2 for the most part.
-    resp, content = client.request(request_token_url, "GET")
-    print json.loads(content)
+    _, content = client.request(request_token_url, "GET")
+    content = json.loads(content)
+    
+    pprint.pprint(content['response']['quotes']['instrumentquote'])

@@ -1,3 +1,3 @@
 import quote
 q = quote.quote()
-q.get_quote(["AAPL"])
+q.get_quote(["AAPL","AMZN"])
