@@ -32,58 +32,35 @@
 		 </style>
 		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript">
-		  function reDrawMemCache(){
-			// MemCache stats
-			$.ajax({
-		     type: "GET",
-		     url: "/admin_page?getstats=hi",
-		     async: true,
-		     dataType: "json",
-			 success: function(data){
-			     $("#stats").html("Items in MemCache: " + data.items + "<br> Cache Size: " + (data.bytes/1000000) + " MB<br>Index DS: " + data.indexds);
-			     drawChart(data.hits, data.misses);
-		       },
-		    });
-		  }
-		
 		  $(document).ready(function() {
-			
-			$("#memcache").click(function(){
+			$("#add_alert").click(function(){
 				$.ajax({
 			     type: "GET",
-			     url: "/admin_page?flushcache=hi",
-			     async: false,
+			     url: "/add_alert?ticker=" + $("#ticker").val() + "&hi_price=" + $("#high_price").val() + "&low_price=" + $("#low_price").val(),
+			     async: true,
 				 success: function(data){ 
-					reDrawMemCache(); 
-					alert("Cache flushed!");
+					alert("Alert Added!");
 				 },
 			   });
 			});
-			
-			$("#counter").click(function(){
-				$.ajax({
-			     type: "GET",
-			     url: "/admin_page?resetpos=hi",
-			     async: false,
-				 success: function(data){ 
-					reDrawMemCache();
-					alert("Position reset!"); 	 
-				 },
-			    });
-			});
-			
-			reDrawMemCache();
-			
-			// Redraw charts and refresh data every so often
-			setInterval("reDrawMemCache()", 15000);
 		  });
 		</script>
 		</head>
 		<body id="body">
-		  <div class="full_width big">Stock Price Alert Settings</div>
-		  <div class="clearButton"><input type="text" /><input type="button" name="keyword" value="Clear MemCache"/></div>
-		  <div class="clearButton" id="counter"><input type="button" name="keyword" id="keyword" value="Reset Counter"/></div>
-		  <div id="chart"></div>
-		  <div id="stats"></div>
+		  <div class="full_width big">Stock Price Alert Settings - {{ user.nickname }}</div>
+		  <div style="text-align: center">Current Alerts:<br>
+			<ul>
+			{% for alert in alerts %}
+			  <li>{{ alert.ticker }}</li>
+			  <li>{{ alert.hi_price }}</li>
+			  <li>{{ alert.low_price }}</li>
+			{% endfor %}
+			</ul><br>Add alert:
+		  </div>
+		  <div class="clearButton">
+			Ticker:<input type="text" id="ticker" /><br>
+			High Price:<input type="text" id="high_price" /><br>
+			Low Price:<input type="text" id="low_price" /><br>
+			<input type="button" id="add_alert" value="Add alert"/></div>
 		</body>
 </html>
