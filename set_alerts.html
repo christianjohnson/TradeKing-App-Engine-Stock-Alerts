@@ -32,7 +32,8 @@
 		 </style>
 		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript">
-		  function reDrawMemCache(){
+		  
+		function reDrawMemCache(){
 			// MemCache stats
 			$.ajax({
 		     type: "GET",
@@ -80,7 +81,16 @@
 		</script>
 		</head>
 		<body id="body">
-		  <div class="full_width big">Stock Price Alert Settings</div>
+		  <div class="full_width big">Stock Price Alert Settings - {{ user.nickname }}</div>
+		  <div style="text-align: center">Current Alerts:<br>
+			<ul>
+			{% for alert in alerts %}
+			  <li>{{ alert.ticker }}</li>
+			  <li>{{ alert.high_price }}</li>
+			  <li>{{ alert.low_price }}</li>
+			{% endfor %}
+			</ul>
+		  </div>
 		  <div class="clearButton"><input type="text" /><input type="button" name="keyword" value="Clear MemCache"/></div>
 		  <div class="clearButton" id="counter"><input type="button" name="keyword" id="keyword" value="Reset Counter"/></div>
 		  <div id="chart"></div>

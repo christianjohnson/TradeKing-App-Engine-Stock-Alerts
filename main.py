@@ -14,8 +14,13 @@ class Alert(db.Model):
 
 class MainPage(webapp.RequestHandler):
   def get(self):
+    user = users.get_current_user()
     path = os.path.join(os.path.dirname(__file__), 'set_alerts.html')
-    template_values = {}
+    query = Alert.all().filter('user = ', )
+    template_values = {
+      'alerts': query.fetch(1000),
+      'user' : user,
+    }
     self.response.out.write(template.render(path, template_values))
 
 class CheckAlerts(webapp.RequestHandler):
