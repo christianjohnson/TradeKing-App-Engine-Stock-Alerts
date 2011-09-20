@@ -47,8 +47,8 @@ class CheckAlerts(webapp.RequestHandler):
     
     for user, alerts in users.items():
       for alert in alert:
-        hi_price  = alert.hi_price
-        low_price = alert.low_price
+        hi_price  = float(alert.hi_price)
+        low_price = float(alert.low_price)
         ticker    = alert.ticker.upper()
         
         if prices[ticker] > hi_price:
@@ -59,7 +59,7 @@ class CheckAlerts(webapp.RequestHandler):
   def getData(stocks):
     d = {}
     for stock in stocks:
-      d[stock['instrument'][sym].upper()] = stock['quote']['lastprice']
+      d[stock['instrument'][sym].upper()] = float(stock['quote']['lastprice'])
     return d
     
 class AddAlert(webapp.RequestHandler):
