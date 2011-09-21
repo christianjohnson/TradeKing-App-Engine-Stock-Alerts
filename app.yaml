@@ -13,6 +13,9 @@ handlers:
 
 - url: /css
   static_dir: css
+  
+- url: /check_alerts
+  script: main.py
 
 - url: /.*
   script: main.py
