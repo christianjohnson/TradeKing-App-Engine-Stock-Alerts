@@ -87,6 +87,10 @@ class CheckAlerts(webapp.RequestHandler):
           hi_price  = float(alert.hi_price)
           low_price = float(alert.low_price)
           ticker    = alert.ticker.upper()
+          
+          if ticker not in l[i:i+5]:
+            continue
+          
           user_address = user.email()
           price = prices[ticker]
           
