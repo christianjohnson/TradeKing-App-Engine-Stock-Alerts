@@ -124,6 +124,7 @@ class CheckAlerts(webapp.RequestHandler):
   def getData(self,stocks):
     d = {}
     for stock in stocks:
+      logging.debug(stock)
       d[(stock['instrument']['sym']).upper()] = float(stock['quote']['lastprice'])
     return d
     
