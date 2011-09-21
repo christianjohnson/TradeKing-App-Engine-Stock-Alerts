@@ -141,8 +141,8 @@ class CheckAlerts(webapp.RequestHandler):
         d[(stock['instrument']['sym']).upper()] = float(stock['quote']['lastprice'])
       return d
     else:
-        if stocks['unknownsymbol'] == 'true':
-          continue
+      if stocks['unknownsymbol'] == 'true':
+        continue
       d[(stocks['instrument']['sym']).upper()] = float(stocks['quote']['lastprice'])
       return d
     
