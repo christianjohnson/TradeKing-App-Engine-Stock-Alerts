@@ -99,7 +99,7 @@ class CheckAlerts(webapp.RequestHandler):
             
           alert.delete()
           
-        if prices[ticker] < low_price:
+        elif prices[ticker] < low_price:
           self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
           
           chat_message_sent = False
@@ -116,10 +116,9 @@ class CheckAlerts(webapp.RequestHandler):
             mail.send_mail(sender_address, user_address, subject, body)
             
           alert.delete()
-            
-    for alert in alerts:
-      alert.curr_price = prices[alert.ticker]
-      alert.put()
+        else:
+          alert.curr_price = prices[ticker]
+          alert.put()
   
   def getData(self,stocks):
     d = {}
