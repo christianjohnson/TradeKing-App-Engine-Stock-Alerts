@@ -55,8 +55,8 @@ class CheckAlerts(webapp.RequestHandler):
     query = Alert.all()
     offset = 0
     while True:
-      alerts = query.fetch(10, offset=offset)
-      offset += 10
+      alerts = query.fetch(5, offset=offset)
+      offset += 5
       
       if not alerts:
         self.response.out.write("No Tickers...") 
