@@ -28,6 +28,28 @@ class MainPage(webapp.RequestHandler):
     }
     self.response.out.write(template.render(path, template_values))
 
+class DeleteAlert(webapp.RequestHandler):
+  def get(self):
+    self.response.headers['Content-Type'] = 'text/plain'
+    
+    user = users.get_current_user()
+
+    if not user:
+      self.response.out.write("no user found, redirecting to login...")
+      self.redirect(users.create_login_url(self.request.uri))
+    else:
+      ticker = urllib.unquote( cgi.escape(self.request.get('ticker')).upper() )
+      
+      query = Alert.all()
+      query.filter('user = '  , user)
+      query.filter('ticker = ', ticker)
+      
+      prev_alerts = query.fetch(1000)
+      
+      for alert in prev_alerts:
+        prev_alert.delete()
+    
+
 class CheckAlerts(webapp.RequestHandler):
   def get(self):
     query = Alert.all()
@@ -74,6 +96,8 @@ class CheckAlerts(webapp.RequestHandler):
             body = "Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker)
             
             mail.send_mail(sender_address, user_address, subject, body)
+            
+            alert.delete()
           
         if prices[ticker] < low_price:
           self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
@@ -90,6 +114,8 @@ class CheckAlerts(webapp.RequestHandler):
             body = "Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker)
             
             mail.send_mail(sender_address, user_address, subject, body)
+            
+            alert.delete()
             
     for alert in alerts:
       alert.curr_price = prices[alert.ticker]
@@ -140,6 +166,7 @@ class AddAlert(webapp.RequestHandler):
 application = webapp.WSGIApplication(
   [('/check_alerts', CheckAlerts),
    ('/add_alert', AddAlert),
+   ('/delete_alert', DeleteAlert),
    ('/', MainPage),])
    
 def main():
