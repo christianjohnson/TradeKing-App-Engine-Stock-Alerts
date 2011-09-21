@@ -37,6 +37,7 @@
 		  <div class="full_width big">Stock Price Alert Settings - {{ user.nickname }}</div>
 		  <div style="text-align: center; font-family: 'Puritan', 'Trebuchet MS', Helvetica, sans-serif; font-size: 150%;">Current Alerts:<br>
 		  </div>
+		    <div id="container-tickers">
 			{% for alert in alerts %}
 			  <div class="ticker">
 			    {{ alert.ticker }} 
@@ -45,7 +46,7 @@
 			    {{ alert.hi_price }} <input type="button" id="delete_alert" value="Delete alert" onclick="delete_ticker('{{ alert.ticker }}');"/>
 			  </div>
 			{% endfor %}
-		  </div>
+			</div>
 		  <div class="clearButton">
 			Add alert:<br>
 			Ticker:<input type="text" id="ticker" /><br>
