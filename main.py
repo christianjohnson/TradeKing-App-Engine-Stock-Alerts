@@ -128,7 +128,7 @@ class CheckAlerts(webapp.RequestHandler):
   
   def getData(self,stocks):
     d = {}
-    if isinstance(x, list):
+    if isinstance(stocks, list):
       logging.debug(stock)
       d[(stock['instrument']['sym']).upper()] = float(stock['quote']['lastprice'])
       return d
