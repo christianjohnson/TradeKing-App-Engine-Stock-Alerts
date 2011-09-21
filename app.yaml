@@ -16,6 +16,7 @@ handlers:
   
 - url: /check_alerts
   script: main.py
+  login: admin
 
 - url: /.*
   script: main.py

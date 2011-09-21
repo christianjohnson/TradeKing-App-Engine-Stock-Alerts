@@ -22,6 +22,7 @@ class MainPage(webapp.RequestHandler):
     user = users.get_current_user()
     path = os.path.join(os.path.dirname(__file__), 'set_alerts.html')
     query = Alert.all().filter('user = ', user)
+    query = query.order('ticker')
     template_values = {
       'alerts': query.fetch(1000),
       'user' : user,
