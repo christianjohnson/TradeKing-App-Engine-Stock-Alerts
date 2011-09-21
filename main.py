@@ -150,6 +150,11 @@ class AddAlert(webapp.RequestHandler):
       hi_price  = urllib.unquote( cgi.escape(self.request.get('hi_price' )).lower() )
       low_price = urllib.unquote( cgi.escape(self.request.get('low_price')).lower() )
       
+      if not hi_price:
+        hi_price = 1000
+      if not low_price:
+        low_price = 0
+      
       query = Alert.all()
       query.filter('user = '  , user)
       query.filter('ticker = ', ticker)
