@@ -54,32 +54,31 @@ class CheckAlerts(webapp.RequestHandler):
   def get(self):
     query = Alert.all()
     offset = 0
-    while True:
-      alerts = query.fetch(5, offset=offset)
-      offset += 5
+    alerts = query.fetch(1000)
+    
+    if not alerts:
+      self.response.out.write("No Tickers...") 
+      return
+    
+    users   = {}
+    tickers = set()
+    
+    for alert in alerts:
+      user   = alert.user
+      ticker = alert.ticker.upper()
       
-      if not alerts:
-        self.response.out.write("No Tickers...") 
-        return
+      if user in users:
+        users[user].append(alert)
+      else:
+        users[user] = [alert]
       
-      users   = {}
-      tickers = set()
-      
-      for alert in alerts:
-        user   = alert.user
-        ticker = alert.ticker.upper()
-        
-        if user in users:
-          users[user].append(alert)
-        else:
-          users[user] = [alert]
-        
-        tickers.add(ticker)
-      
-      
-      q = quote.quote()
-      
-      d = q.get_quote(list(tickers))
+      tickers.add(ticker)
+    
+    l = list(tickers)
+    
+    q = quote.quote()
+    for i in range(0,len(tickers),5):
+      d = q.get_quote(l[i:i+5])
       
       prices = self.getData(d)
       
