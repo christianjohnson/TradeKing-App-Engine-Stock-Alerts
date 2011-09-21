@@ -55,6 +55,9 @@ class CheckAlerts(webapp.RequestHandler):
     query = Alert.all()
     alerts = query.fetch(1000)
     
+    if not alerts:
+      self.response.out.write("No Tickers...") 
+    
     users   = {}
     tickers = set()
     
@@ -68,6 +71,7 @@ class CheckAlerts(webapp.RequestHandler):
         users[user] = [alert]
       
       tickers.add(ticker)
+    
     
     q = quote.quote()
     
@@ -126,6 +130,7 @@ class CheckAlerts(webapp.RequestHandler):
     if isinstance(x, list):
       logging.debug(stock)
       d[(stock['instrument']['sym']).upper()] = float(stock['quote']['lastprice'])
+      return d
     else:
       for stock in stocks:
         logging.debug(stock)
