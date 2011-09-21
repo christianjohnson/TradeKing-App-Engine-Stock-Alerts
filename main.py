@@ -136,12 +136,12 @@ class CheckAlerts(webapp.RequestHandler):
     d = {}
     if isinstance(stocks, list):
       for stock in stocks:
-        if stock['unknownsymbol'] == 'false':
+        if stock['unknownsymbol'] == 'true':
           continue
         d[(stock['instrument']['sym']).upper()] = float(stock['quote']['lastprice'])
       return d
     else:
-        if stocks['unknownsymbol'] == 'false':
+        if stocks['unknownsymbol'] == 'true':
           continue
       d[(stocks['instrument']['sym']).upper()] = float(stocks['quote']['lastprice'])
       return d
