@@ -57,6 +57,7 @@ class CheckAlerts(webapp.RequestHandler):
     
     if not alerts:
       self.response.out.write("No Tickers...") 
+      return
     
     users   = {}
     tickers = set()
