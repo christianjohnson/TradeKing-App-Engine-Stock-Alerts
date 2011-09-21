@@ -97,7 +97,7 @@ class CheckAlerts(webapp.RequestHandler):
             
             mail.send_mail(sender_address, user_address, subject, body)
             
-            alert.delete()
+          alert.delete()
           
         if prices[ticker] < low_price:
           self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
@@ -115,7 +115,7 @@ class CheckAlerts(webapp.RequestHandler):
             
             mail.send_mail(sender_address, user_address, subject, body)
             
-            alert.delete()
+          alert.delete()
             
     for alert in alerts:
       alert.curr_price = prices[alert.ticker]
