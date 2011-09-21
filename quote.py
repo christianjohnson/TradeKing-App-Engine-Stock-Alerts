@@ -7,10 +7,11 @@ from keys import TradeKingKeys
 
 class quote(object):
   def __init__(self):
-    self.consumer_key = TradeKingKeys.consumer_key
-    self.consumer_secret = TradeKingKeys.consumer_secret
-    self.access_token = TradeKingKeys.access_token
-    self.access_secret = TradeKingKeys.access_secret
+    tk_keys = TradeKingKeys()
+    self.consumer_key = tk_keys.consumer_key
+    self.consumer_secret = tk_keys.consumer_secret
+    self.access_token = tk_keys.access_token
+    self.access_secret = tk_keys.access_secret
 
   def get_quote(self, tickers):
     # Set the API endpoint 
