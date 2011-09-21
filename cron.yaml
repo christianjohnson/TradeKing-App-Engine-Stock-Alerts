@@ -3,8 +3,3 @@ cron:
   url: /check_alerts
   schedule: every 1 minutes from 9:15 to 16:15
   timezone: US/Eastern
-  
-- description: Crawl for stock quotes and check against alerts
-  url: /check_alerts
-  schedule: every 1 hours from 16:15 to 9:15
-  timezone: US/Eastern
