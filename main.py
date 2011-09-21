@@ -44,10 +44,10 @@ class DeleteAlert(webapp.RequestHandler):
       query.filter('user = '  , user)
       query.filter('ticker = ', ticker)
       
-      prev_alerts = query.fetch(1000)
+      alerts = query.fetch(1000)
       
-      for alert in prev_alerts:
-        prev_alert.delete()
+      for alert in alerts:
+        alert.delete()
     
 
 class CheckAlerts(webapp.RequestHandler):
@@ -81,29 +81,30 @@ class CheckAlerts(webapp.RequestHandler):
         low_price = float(alert.low_price)
         ticker    = alert.ticker.upper()
         user_address = user.email()
+        price = prices[ticker]
         
-        if prices[ticker] > hi_price:
-          self.response.out.write("Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker) )
+        if price > hi_price:
+          self.response.out.write("Broke above %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),hi_price,ticker, price) )
           
           chat_message_sent = False
-          msg = "%s went up to %.2f!" % (ticker,prices[ticker])
+          msg = "%s went up to %.2f (Which is past your limit of %.2f)!" % (ticker,price,hi_price)
           status_code = xmpp.send_message(user_address, msg)
           chat_message_sent = (status_code == xmpp.NO_ERROR)
           
           if mail.is_email_valid(user_address):
             sender_address = "rpibic@gmail.com"
             subject = "Alert for %s" % (ticker)
-            body = "Broke above %s's limit of $%.2f for %s" % (user.nickname(),hi_price,ticker)
+            body = "Broke above %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),hi_price,ticker,price)
             
             mail.send_mail(sender_address, user_address, subject, body)
             
           alert.delete()
           
-        elif prices[ticker] < low_price:
-          self.response.out.write("Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker) )
+        elif price < low_price:
+          self.response.out.write("Broke below %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),low_price,ticker,price) )
           
           chat_message_sent = False
-          msg = "%s went down to %.2f!" % (ticker,prices[ticker])
+          msg = "%s went down to %.2f (Which is past your limit of %.2f)!" % (ticker,price,low_price)
           status_code = xmpp.send_message(user_address, msg)
           chat_message_sent = (status_code == xmpp.NO_ERROR)
           
@@ -111,7 +112,7 @@ class CheckAlerts(webapp.RequestHandler):
           if mail.is_email_valid(user_address):
             sender_address = "rpibic@gmail.com"
             subject = "Alert for %s" % (ticker)
-            body = "Broke below %s's limit of $%.2f for %s" % (user.nickname(),low_price,ticker)
+            body = "Broke below %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),low_price,ticker,price)
             
             mail.send_mail(sender_address, user_address, subject, body)
             
