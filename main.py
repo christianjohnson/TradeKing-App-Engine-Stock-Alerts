@@ -34,7 +34,7 @@ class Watched(webapp.RequestHandler):
     query = Alert.all()
     alerts = query.fetch(1000)
     for alert in alerts:
-      self.response.out.write(alert.ticker)
+      self.response.out.write(alert.ticker + ' ')
   
   
   
