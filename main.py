@@ -29,6 +29,14 @@ class MainPage(webapp.RequestHandler):
     }
     self.response.out.write(template.render(path, template_values))
 
+class Watched(webapp.RequestHandler):
+  def get(self):
+    alerts = query.fetch(1000)
+    for alert in alerts:
+      self.response.out.write(alert.ticker)
+  
+  
+  
 class DeleteAlert(webapp.RequestHandler):
   def get(self):
     self.response.headers['Content-Type'] = 'text/plain'
@@ -192,6 +200,7 @@ application = webapp.WSGIApplication(
   [('/check_alerts', CheckAlerts),
    ('/add_alert', AddAlert),
    ('/delete_alert', DeleteAlert),
+   ('/watching', Watched),
    ('/', MainPage),])
    
 def main():
