@@ -32,7 +32,7 @@ class MainPage(webapp.RequestHandler):
 class Watched(webapp.RequestHandler):
   def get(self):
     query = Alert.all()
-    query.oder('ticker')
+    query.order('ticker')
     alerts = query.fetch(1000)
     for alert in alerts:
       self.response.out.write(alert.ticker + ' ')
