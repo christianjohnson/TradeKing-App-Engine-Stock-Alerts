@@ -16,6 +16,7 @@ class Alert(db.Model):
   low_price  = db.FloatProperty()
   user       = db.UserProperty()
   curr_price = db.FloatProperty()
+  note       = db.StringProperty(multiline=True)
 
 class MainPage(webapp.RequestHandler):
   def get(self):
@@ -36,7 +37,6 @@ class Watched(webapp.RequestHandler):
     alerts = query.fetch(1000)
     for alert in alerts:
       self.response.out.write(alert.ticker + ' ')
-  
   
   
 class DeleteAlert(webapp.RequestHandler):
@@ -106,27 +106,27 @@ class CheckAlerts(webapp.RequestHandler):
           price = prices[ticker]
           
           if price > hi_price:
-            self.response.out.write("Broke above %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),hi_price,ticker, price) )
+            self.response.out.write("Broke above %s's limit of $%.2f for %s, now at %.2f, note was %s" % (user.nickname(),hi_price,ticker, price, alert.note) )
             
             chat_message_sent = False
-            msg = "%s went up to %.2f (Which is past your limit of %.2f)!" % (ticker,price,hi_price)
+            msg = "%s went up to %.2f (Which is past your limit of %.2f), note was: %s!" % (ticker,price,hi_price, alert.note)
             status_code = xmpp.send_message(user_address, msg)
             chat_message_sent = (status_code == xmpp.NO_ERROR)
             
             if mail.is_email_valid(user_address):
               sender_address = "rpibic@gmail.com"
               subject = "Alert for %s" % (ticker)
-              body = "Broke above %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),hi_price,ticker,price)
+              body = "Broke above %s's limit of $%.2f for %s, now at %.2f, note was: %s" % (user.nickname(), hi_price, ticker, price, alert.note)
               
               mail.send_mail(sender_address, user_address, subject, body)
               
             alert.delete()
             
           elif price < low_price:
-            self.response.out.write("Broke below %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),low_price,ticker,price) )
+            self.response.out.write("Broke below %s's limit of $%.2f for %s, now at %.2f, note was: %s" % (user.nickname(),low_price,ticker,price, alert.note) )
             
             chat_message_sent = False
-            msg = "%s went down to %.2f (Which is past your limit of %.2f)!" % (ticker,price,low_price)
+            msg = "%s went down to %.2f (Which is past your limit of %.2f), note was: %s!" % (ticker,price,low_price, alert.note)
             status_code = xmpp.send_message(user_address, msg)
             chat_message_sent = (status_code == xmpp.NO_ERROR)
             
@@ -134,7 +134,7 @@ class CheckAlerts(webapp.RequestHandler):
             if mail.is_email_valid(user_address):
               sender_address = "rpibic@gmail.com"
               subject = "Alert for %s" % (ticker)
-              body = "Broke below %s's limit of $%.2f for %s, now at %.2f" % (user.nickname(),low_price,ticker,price)
+              body = "Broke below %s's limit of $%.2f for %s, now at %.2f, note was: %s" % (user.nickname(),low_price,ticker,price, alert.note)
               
               mail.send_mail(sender_address, user_address, subject, body)
               
@@ -170,6 +170,7 @@ class AddAlert(webapp.RequestHandler):
       ticker    = urllib.unquote( cgi.escape(self.request.get('ticker'   )).upper() )
       hi_price  = urllib.unquote( cgi.escape(self.request.get('hi_price' )).lower() )
       low_price = urllib.unquote( cgi.escape(self.request.get('low_price')).lower() )
+      note = urllib.unquote(cgi.escape(self.request.get('note')))
       
       if not hi_price:
         hi_price = 1000
@@ -187,6 +188,7 @@ class AddAlert(webapp.RequestHandler):
         
         prev_alert.hi_price  = float(hi_price)
         prev_alert.low_price = float(low_price)
+        prev_alert.note = note
         prev_alert.put()
       else:
         alert = Alert()
@@ -194,6 +196,7 @@ class AddAlert(webapp.RequestHandler):
         alert.ticker    = ticker
         alert.hi_price  = float(hi_price)
         alert.low_price = float(low_price)
+        alert.note = note
         alert.user      = user
         
         alert.put()

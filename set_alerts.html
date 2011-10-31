@@ -24,7 +24,7 @@
 			$("#add_alert").click(function(){
 				$.ajax({
 			     type: "GET",
-			     url: "/add_alert?ticker=" + $("#ticker").val() + "&hi_price=" + $("#high_price").val() + "&low_price=" + $("#low_price").val(),
+			     url: "/add_alert?ticker=" + $("#ticker").val() + "&hi_price=" + $("#high_price").val() + "&low_price=" + $("#low_price").val() + "&note=" + $("#note").val(),
 			     async: true,
 				 success: function(data){ 
 			   	window.location.replace("http://ibdstockfinder.appspot.com");
@@ -45,6 +45,7 @@
 			    {{ alert.low_price }} <
 			    {{ alert.curr_price }} <
 			    {{ alert.hi_price }} <input type="button" id="delete_alert" value="Delete alert" onclick="delete_ticker('{{ alert.ticker }}');"/>
+			    - {{ alert.note }}
 			  </div>
 			{% endfor %}
 			</div>
@@ -53,6 +54,7 @@
 			Ticker:<input type="text" id="ticker" /><br>
 			High Price:<input type="text" id="high_price" /><br>
 			Low Price:<input type="text" id="low_price" /><br>
+			Note:<input type="text" id="note" /><br>
 			<input type="button" id="add_alert" value="Add alert"/></div>
 		</body>
 </html>
